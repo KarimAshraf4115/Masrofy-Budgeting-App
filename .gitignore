@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# SQLite database - each developer has their own local copy
+masrofy.db
+
+# Windows system files
+Thumbs.db
+desktop.ini
