@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS BudgetCycle (
     totalAllowance REAL NOT NULL,
     startDate TEXT NOT NULL,
     endDate TEXT NOT NULL,
-    isActive INTEGER DEFAULT 1
+    isActive INTEGER DEFAULT 1,
+    createdAt TEXT DEFAULT (datetime('now'))
 );
 
 CREATE TABLE IF NOT EXISTS Expense (
@@ -28,7 +29,6 @@ CREATE TABLE IF NOT EXISTS Expense (
     cycleId INTEGER NOT NULL,
     timestamp TEXT NOT NULL,
     note TEXT,
-    createdAt TEXT DEFAULT (datetime('now')),
     FOREIGN KEY (categoryId) REFERENCES Category(id),
     FOREIGN KEY (cycleId) REFERENCES BudgetCycle(id) ON DELETE CASCADE
 );
