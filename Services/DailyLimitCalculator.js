@@ -44,4 +44,4 @@ class DailyLimitCalculator {
     }
 }
 
-module.exports = DailyLimitCalculator;
+export default DailyLimitCalculator;
