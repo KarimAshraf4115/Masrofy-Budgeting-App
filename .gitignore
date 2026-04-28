@@ -40,8 +40,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# ==========================================
 # SQLite database - each developer has their own local copy
-masrofy.db
+# ==========================================
+masroofy.db
+masroofy.db-shm
+masroofy.db-wal
 
 # Windows system files
 Thumbs.db
