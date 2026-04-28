@@ -1,6 +1,6 @@
 // models are the blueprints or data structures that represent the entities in your application. In this case, the User model represents the structure of a user in the system, including their properties and how they interact with the database.
 
-const crypto = require('crypto'); // importing the crypto module to handle hashing of the user's PIN for secure storage (Node.js built-in module for cryptographic operations)
+import crypto from 'crypto';  // importing the crypto module to handle hashing of the user's PIN for secure storage (Node.js built-in module for cryptographic operations)
 
 class User{
     constructor(id, pinHash, isPinEnabled, failedAttempts, lockoutTime){

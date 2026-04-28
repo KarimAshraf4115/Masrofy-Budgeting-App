@@ -63,7 +63,8 @@ export async function POST(request){
     const activeCycle = cycleRepo.getActiveCycle();
 
     if (activeCycle) {
-        const percentageUsed = calculator.checkThreshold(totalSpent, activeCycle.totalAllowance);                const remainingBalance = calculator.calculateRemainingBalance(activeCycle.totalAllowance, totalSpent);
+        const percentageUsed = calculator.checkThreshold(totalSpent, activeCycle.totalAllowance);                
+        const remainingBalance = calculator.calculateRemainingBalance(activeCycle.totalAllowance, totalSpent);
         const cycle = new BudgetCycle(
             activeCycle.id,
             activeCycle.totalAllowance,

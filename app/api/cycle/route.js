@@ -26,7 +26,7 @@ export async function GET(){ // Used to fetch-retrieve data from the server
 }
 
 export async function POST(request) { // Used to send new data to the server to be saved
-    const body = await request.json();
+    const body = await request.json(); // 
 
     if (!body.totalAllowance || !body.startDate || !body.endDate) { // Validate required fields
         return Response.json({ message: 'Missing required fields' }, { status: 400 });
@@ -38,7 +38,7 @@ export async function POST(request) { // Used to send new data to the server to 
         body.startDate,
         body.endDate,
         1, // SQLite needs 1 instead of true
-        new Date().toISOString() // FIX: SQLite needs a string, not a Date object
+        new Date().toISOString() // SQLite needs a string, not a Date object
     );
 
     const remainingDays = newCycle.getRemainingDays();
@@ -50,7 +50,7 @@ export async function POST(request) { // Used to send new data to the server to 
         message: 'New cycle created successfully',
         cycleid: cycleid,
         dailyLimit: dailyLimit.toFixed(2) 
-     }, { status: 201 });   
+     }, { status: 201 });   // 201 means Created successfully, and we also return the ID of the newly created cycle and the calculated daily limit for the user to see immediately after creating a new cycle
 }
 
 export async function DELETE(request) { // Used to remove data from the server
