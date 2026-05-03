@@ -43,9 +43,9 @@ next-env.d.ts
 # ==========================================
 # SQLite database - each developer has their own local copy
 # ==========================================
-masroofy.db
-masroofy.db-shm
-masroofy.db-wal
+masrofy.db
+masrofy.db-shm
+masrofy.db-wal
 
 # Windows system files
 Thumbs.db

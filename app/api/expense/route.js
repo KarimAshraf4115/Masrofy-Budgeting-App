@@ -1,7 +1,7 @@
 import ExpenseRepository from '@/lib/ExpenseRepository';
 import CycleRepository from '@/lib/CycleRepository';
-import DailyLimitCalculator from '@/services/DailyLimitCalculator';
-import NotificationService from '@/services/NotificationService';
+import DailyLimitCalculator from '@/Services/DailyLimitCalculator';
+import NotificationService from '@/Services/NotificationService';
 import Expense from '@/models/Expense';
 import BudgetCycle from '@/models/BudgetCycle';
 

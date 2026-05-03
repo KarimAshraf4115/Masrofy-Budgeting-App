@@ -1,7 +1,7 @@
 // app/api/cycles/route.js
 
 import CycleRepository from '@/lib/CycleRepository';
-import DailyLimitCalculator from '@/services/DailyLimitCalculator'
+import DailyLimitCalculator from '@/Services/DailyLimitCalculator'
 import BudgetCycle from '@/models/BudgetCycle';
 
 const cycleRepo = new CycleRepository();
@@ -44,6 +44,13 @@ export async function POST(request) { // Used to send new data to the server to 
     const remainingDays = newCycle.getRemainingDays();
     const remainingBalance = calculator.calculateRemainingBalance(newCycle.totalAllowance, 0); 
     const dailyLimit = calculator.calculateDailyLimit(remainingBalance, remainingDays);
+    // Deactivate any existing active cycle first
+    const existingCycle = cycleRepo.getActiveCycle();
+    if (existingCycle) {
+        existingCycle.isActive = 0;
+        cycleRepo.updateCycle(existingCycle);
+    }
+
     const cycleid = cycleRepo.insertCycle(newCycle);
 
     return Response.json({

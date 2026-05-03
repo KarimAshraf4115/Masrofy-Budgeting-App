@@ -2,9 +2,9 @@
 
 import CycleRepository from '@/lib/CycleRepository';
 import ExpenseRepository from '@/lib/ExpenseRepository';
-import DailyLimitCalculator from '@/services/DailyLimitCalculator';
+import DailyLimitCalculator from '@/Services/DailyLimitCalculator';
 import BudgetCycle from '@/models/BudgetCycle';
-import NotificationService from '@/services/NotificationService';
+import NotificationService from '@/Services/NotificationService';
 
 const cycleRepo = new CycleRepository();
 const expenseRepo = new ExpenseRepository();

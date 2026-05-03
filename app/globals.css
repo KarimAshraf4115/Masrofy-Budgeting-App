@@ -1,26 +1,80 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* --- YOUR CUSTOM COLORS --- */
+  --color-on-primary-fixed: #001c37;
+  --color-tertiary: #4b2d00;
+  --color-primary-fixed: #d2e4ff;
+  --color-error: #ba1a1a;
+  --color-primary-container: #0f4c81;
+  --color-primary: #00355f;
+  --color-on-tertiary-fixed-variant: #653e00;
+  --color-inverse-on-surface: #eaf1ff;
+  --color-on-secondary-container: #00714d;
+  --color-on-error: #ffffff;
+  --color-surface-bright: #f8f9ff;
+  --color-on-tertiary-container: #ffa71e;
+  --color-secondary-container: #6cf8bb;
+  --color-on-primary: #ffffff;
+  --color-tertiary-container: #6a4100;
+  --color-surface-tint: #2d6197;
+  --color-primary-fixed-dim: #a0c9ff;
+  --color-on-surface: #0b1c30;
+  --color-background: #f8f9ff;
+  --color-on-primary-fixed-variant: #07497d;
+  --color-error-container: #ffdad6;
+  --color-secondary-fixed-dim: #4edea3;
+  --color-on-surface-variant: #42474f;
+  --color-surface-container-highest: #d3e4fe;
+  --color-inverse-primary: #a0c9ff;
+  --color-surface-container-low: #eff4ff;
+  --color-on-tertiary-fixed: #2a1700;
+  --color-surface-container-lowest: #ffffff;
+  --color-secondary: #006c49;
+  --color-surface-container-high: #dce9ff;
+  --color-secondary-fixed: #6ffbbe;
+  --color-tertiary-fixed: #ffddb8;
+  --color-surface-variant: #d3e4fe;
+  --color-on-primary-container: #8ebdf9;
+  --color-on-background: #0b1c30;
+  --color-on-secondary-fixed: #002113;
+  --color-on-error-container: #93000a;
+  --color-outline: #727780;
+  --color-surface: #f8f9ff;
+  --color-outline-variant: #c2c7d1;
+  --color-on-secondary: #ffffff;
+  --color-tertiary-fixed-dim: #ffb95f;
+  --color-surface-container: #e5eeff;
+  --color-on-tertiary: #ffffff;
+  --color-surface-dim: #cbdbf5;
+  --color-on-secondary-fixed-variant: #005236;
+  --color-inverse-surface: #213145;
+
+  /* --- YOUR CUSTOM SPACING --- */
+  --spacing-stack-gap: 1rem;
+  --spacing-inline-gap: 0.75rem;
+  --spacing-card-padding: 1.25rem;
+  --spacing-section-gap: 2rem;
+  --spacing-container-margin: 1.5rem;
+
+  /* --- YOUR CUSTOM FONTS --- */
+  --font-label-caps: "Manrope", sans-serif;
+  --font-display-num: "Manrope", sans-serif;
+  --font-body-sm: "Manrope", sans-serif;
+  --font-headline-md: "Manrope", sans-serif;
+  --font-body-lg: "Manrope", sans-serif;
+  --font-headline-lg: "Manrope", sans-serif;
+
+  /* --- YOUR CUSTOM FONT SIZES (with line heights) --- */
+  --font-size-label-caps: 12px / 16px;
+  --font-size-display-num: 40px / 48px;
+  --font-size-body-sm: 14px / 20px;
+  --font-size-headline-md: 20px / 28px;
+  --font-size-body-lg: 16px / 24px;
+  --font-size-headline-lg: 24px / 32px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom Material Icons setting */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
