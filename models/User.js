@@ -3,10 +3,10 @@
 import crypto from 'crypto';  // importing the crypto module to handle hashing of the user's PIN for secure storage (Node.js built-in module for cryptographic operations)
 
 class User{
-    constructor(id, pinHash, isPinEnabled, failedAttempts, lockoutTime){
+    constructor(id, pinHash, PinEnabled, failedAttempts, lockoutTime){
         this.id = id;
         this.pinHash = pinHash;
-        this.isPinEnabled = isPinEnabled;
+        this.isPinEnabled = PinEnabled;
         this.failedAttempts = failedAttempts;
         this.lockoutTime = lockoutTime;
     }
