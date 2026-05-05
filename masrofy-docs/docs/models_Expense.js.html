@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/Expense.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/Expense.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview Expense model representing a single financial transaction logged by the user.
+ * Provides formatting utilities for display purposes.
+ * @module models/Expense
+ * @author Karim Ashraf Ahmed, Eyad Hatem Fouad, Sherif Ahmed Metwally, Ahmed Sherif Ahmed
+ */
+
+/**
+ * @class Expense
+ * @classdesc Represents a single expense transaction. Maps directly to a row
+ * in the Expense table of the SQLite database. Provides helper methods
+ * for formatting the amount and date for display in the UI.
+ */
+class Expense {
+    /**
+     * Creates a new Expense instance.
+     * @param {number|null} id - The unique database identifier. Null when creating before saving.
+     * @param {number} amount - The expense amount in EGP.
+     * @param {number} categoryId - The foreign key referencing the Category table.
+     * @param {number} cycleId - The foreign key referencing the BudgetCycle table.
+     * @param {string} timestamp - The ISO 8601 timestamp when the expense was recorded.
+     * @param {string} note - An optional note describing the expense. Empty string if not provided.
+     */
+    constructor(id, amount, categoryId, cycleId, timestamp, note) {
+        this.id = id;
+        this.amount = amount;
+        this.categoryId = categoryId;
+        this.cycleId = cycleId;
+        this.timestamp = timestamp;
+        this.note = note;
+    }
+
+    /**
+     * Formats the expense timestamp into a human-readable date string.
+     * @returns {string} A formatted date string (e.g., 'May 3, 2026').
+     * @example
+     * expense.getFormattedDate(); // 'May 3, 2026'
+     */
+    getFormattedDate() {
+        const date = new Date(this.timestamp);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
+    /**
+     * Formats the expense amount as a currency string with two decimal places.
+     * @returns {string} A formatted amount string (e.g., '150.00 EGP').
+     * @example
+     * expense.getFormattedAmount(); // '150.00 EGP'
+     */
+    getFormattedAmount() {
+        return this.amount.toFixed(2) + ' EGP';
+    }
+}
+
+export default Expense;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-api.html">api</a></li><li><a href="module-lib_CycleRepository.html">lib/CycleRepository</a></li><li><a href="module-lib_ExpenseRepository.html">lib/ExpenseRepository</a></li><li><a href="module-lib_SQLiteHelper.html">lib/SQLiteHelper</a></li><li><a href="module-lib_UserRepository.html">lib/UserRepository</a></li><li><a href="module-models_BudgetCycle.html">models/BudgetCycle</a></li><li><a href="module-models_Category.html">models/Category</a></li><li><a href="module-models_Expense.html">models/Expense</a></li><li><a href="module-models_User.html">models/User</a></li><li><a href="module-services_DailyLimitCalculator.html">services/DailyLimitCalculator</a></li><li><a href="module-services_NotificationService.html">services/NotificationService</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-api-API_Cycle.html">API_Cycle</a></li><li><a href="module-api-API_Dashboard.html">API_Dashboard</a></li><li><a href="module-api-API_Expense.html">API_Expense</a></li><li><a href="module-api-API_User.html">API_User</a></li><li><a href="module-lib_SQLiteHelper-SQLiteHelperSingleton.html">SQLiteHelperSingleton</a></li></ul><h3>Classes</h3><ul><li><a href="module-lib_CycleRepository-CycleRepository.html">CycleRepository</a></li><li><a href="module-lib_ExpenseRepository-ExpenseRepository.html">ExpenseRepository</a></li><li><a href="module-lib_SQLiteHelper-SQLiteHelper.html">SQLiteHelper</a></li><li><a href="module-lib_UserRepository-UserRepository.html">UserRepository</a></li><li><a href="module-models_BudgetCycle-BudgetCycle.html">BudgetCycle</a></li><li><a href="module-models_Category-Category.html">Category</a></li><li><a href="module-models_Expense-Expense.html">Expense</a></li><li><a href="module-models_User-User.html">User</a></li><li><a href="module-services_DailyLimitCalculator-DailyLimitCalculator.html">DailyLimitCalculator</a></li><li><a href="module-services_NotificationService-NotificationService.html">NotificationService</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Tue May 05 2026 19:32:42 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

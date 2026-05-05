@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Masroofy — Personal Finance Tracker</h1>
+<p><strong>Cairo University — Faculty of Computers and Artificial Intelligence</strong>
+<strong>Course:</strong> Software Engineering
+<strong>Supervisor:</strong> Dr. Mohamed El-Ramly
+<strong>Section:</strong> S28</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Karim Ashraf Ahmed</td>
+<td>Full Stack Developer</td>
+</tr>
+<tr>
+<td>Eyad Hatem Fouad</td>
+<td>Full Stack Developer</td>
+</tr>
+<tr>
+<td>Sherif Ahmed Metwally</td>
+<td>Full Stack Developer</td>
+</tr>
+<tr>
+<td>Ahmed Sherif Ahmed</td>
+<td>Full Stack Developer</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Project Overview</h2>
+<p>Masroofy is a personal budget management web application built with Next.js and SQLite. It allows a single user to define monthly budget cycles, log daily expenses across categories, and track spending through a real-time dashboard. The application is secured with a 4-digit PIN authentication system.</p>
+<h3>Key Features</h3>
+<ul>
+<li><strong>Budget Cycles</strong> — Define a custom time period with a total allowance</li>
+<li><strong>Expense Logging</strong> — Log expenses across 4 categories (Food, Transport, Entertainment, Other)</li>
+<li><strong>Smart Daily Limit</strong> — Automatically calculates how much can be spent per day based on remaining balance and remaining days</li>
+<li><strong>Category Breakdown</strong> — Visual donut chart showing spending distribution across categories</li>
+<li><strong>Budget Alerts</strong> — Notifications at 80% usage, 100% usage, and on the final day of the cycle</li>
+<li><strong>PIN Authentication</strong> — Secure 4-digit PIN login with 5-attempt lockout and 30-second cooldown</li>
+<li><strong>Transaction History</strong> — Grouped-by-date view of all expenses with delete functionality</li>
+<li><strong>Cycle Reset</strong> — Danger zone option to delete all data and start fresh</li>
+</ul>
+<hr>
+<h2>Technology Stack</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td>Next.js 16 (App Router)</td>
+<td>React-based UI with server and client components</td>
+</tr>
+<tr>
+<td>Backend</td>
+<td>Next.js API Routes</td>
+<td>RESTful API endpoints</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>SQLite (better-sqlite3)</td>
+<td>Local file-based relational database</td>
+</tr>
+<tr>
+<td>Styling</td>
+<td>Tailwind CSS</td>
+<td>Utility-first CSS framework</td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>JSDoc</td>
+<td>JavaScript API documentation generator</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Project Structure</h2>
+<pre class="prettyprint source"><code>masrofy/
+├── app/
+│   ├── api/
+│   │   ├── cycle/route.js          # Budget cycle CRUD API
+│   │   ├── expense/route.js        # Expense CRUD API
+│   │   ├── dashboard/route.js      # Aggregated dashboard data API
+│   │   └── user/
+│   │       ├── route.js            # Auth: PIN check, signup, login
+│   │       └── change-pin/route.js # Auth: PIN update
+│   ├── dashboard/page.js           # Main dashboard view
+│   ├── expenses/add/page.js        # Add expense form
+│   ├── history/page.js             # Transaction history
+│   ├── login/page.js               # PIN login screen
+│   ├── signup/page.js              # PIN setup screen (first time)
+│   ├── setup/page.js               # Budget cycle setup
+│   ├── settings/page.js            # App settings
+│   ├── layout.js                   # Root layout with AppShell sidebar
+│   └── page.js                     # Landing page (redirects based on PIN status)
+│
+├── components/
+│   └── AppShell.js                 # Sidebar navigation wrapper
+│
+├── models/
+│   ├── User.js                     # User entity with PIN auth logic
+│   ├── BudgetCycle.js              # Budget cycle entity with date calculations
+│   ├── Expense.js                  # Expense entity with formatting helpers
+│   └── Category.js                 # Category entity
+│
+├── lib/
+│   ├── SQLiteHelper.js             # Singleton database connection manager
+│   ├── CycleRepository.js          # Data access layer for BudgetCycle
+│   ├── ExpenseRepository.js        # Data access layer for Expense
+│   └── UserRepository.js           # Data access layer for User
+│
+├── services/
+│   ├── DailyLimitCalculator.js     # Financial calculation business logic
+│   └── NotificationService.js      # Budget alert generation logic
+│
+├── db/
+│   └── init.sql                    # Database schema and seed data
+│
+└── docs/                           # Generated JSDoc HTML documentation
+</code></pre>
+<hr>
+<h2>Database Schema</h2>
+<pre class="prettyprint source lang-sql"><code>User            — Single user row with PIN hash and lockout state
+BudgetCycle     — One active cycle at a time with allowance and dates
+Expense         — Individual transactions linked to a cycle and category
+Category        — Pre-seeded: Food, Transport, Entertainment, Other
+</code></pre>
+<p>Foreign key relationships:</p>
+<ul>
+<li><code>Expense.categoryId</code> → <code>Category.id</code></li>
+<li><code>Expense.cycleId</code> → <code>BudgetCycle.id</code> (ON DELETE CASCADE)</li>
+</ul>
+<hr>
+<h2>Architecture Decisions</h2>
+<h3>Repository Pattern</h3>
+<p>All database operations are isolated in repository classes (<code>CycleRepository</code>, <code>ExpenseRepository</code>, <code>UserRepository</code>). API routes call repositories — they never write raw SQL directly. This keeps business logic separate from data access.</p>
+<h3>Singleton Pattern</h3>
+<p><code>SQLiteHelper</code> uses a Singleton pattern to ensure only one database connection exists throughout the application lifecycle, preventing connection duplication and improving performance.</p>
+<h3>Stateless API Design</h3>
+<p>Every API request creates fresh instances of all repositories and services. No state is shared between requests, which ensures predictable behavior and eliminates cross-request data contamination.</p>
+<h3>Single-User Model</h3>
+<p>Masroofy is designed as a personal device application. The User table contains at most one row, simplifying authentication and data ownership concerns.</p>
+<hr>
+<h2>Installation &amp; Setup</h2>
+<h3>Prerequisites</h3>
+<ul>
+<li>Node.js 18 or higher</li>
+<li>npm</li>
+</ul>
+<h3>Steps</h3>
+<pre class="prettyprint source lang-bash"><code># 1. Clone the repository
+git clone &lt;repository-url>
+cd masrofy
+
+# 2. Install dependencies
+npm install
+
+# 3. Run the development server
+npm run dev
+
+# 4. Open in browser
+# http://localhost:3000
+</code></pre>
+<p>On first launch, the application will redirect to <code>/signup</code> where you can set up your 4-digit PIN. The SQLite database file (<code>masrofy.db</code>) is created automatically in the project root on first run.</p>
+<hr>
+<h2>API Reference</h2>
+<p>See the generated JSDoc documentation in the <code>/docs</code> folder for the complete API reference including all endpoints, parameters, and example responses.</p>
+<hr>
+<h2>Design Patterns Used</h2>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Where Applied</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Singleton</td>
+<td><code>SQLiteHelper</code></td>
+<td>Single database connection</td>
+</tr>
+<tr>
+<td>Repository</td>
+<td><code>CycleRepository</code>, <code>ExpenseRepository</code>, <code>UserRepository</code></td>
+<td>Separate data access from business logic</td>
+</tr>
+<tr>
+<td>Service Layer</td>
+<td><code>DailyLimitCalculator</code>, <code>NotificationService</code></td>
+<td>Isolate business logic from API routes</td>
+</tr>
+<tr>
+<td>Model</td>
+<td><code>User</code>, <code>BudgetCycle</code>, <code>Expense</code>, <code>Category</code></td>
+<td>Represent database entities as objects</td>
+</tr>
+</tbody>
+</table></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-api.html">api</a></li><li><a href="module-lib_CycleRepository.html">lib/CycleRepository</a></li><li><a href="module-lib_ExpenseRepository.html">lib/ExpenseRepository</a></li><li><a href="module-lib_SQLiteHelper.html">lib/SQLiteHelper</a></li><li><a href="module-lib_UserRepository.html">lib/UserRepository</a></li><li><a href="module-models_BudgetCycle.html">models/BudgetCycle</a></li><li><a href="module-models_Category.html">models/Category</a></li><li><a href="module-models_Expense.html">models/Expense</a></li><li><a href="module-models_User.html">models/User</a></li><li><a href="module-services_DailyLimitCalculator.html">services/DailyLimitCalculator</a></li><li><a href="module-services_NotificationService.html">services/NotificationService</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-api-API_Cycle.html">API_Cycle</a></li><li><a href="module-api-API_Dashboard.html">API_Dashboard</a></li><li><a href="module-api-API_Expense.html">API_Expense</a></li><li><a href="module-api-API_User.html">API_User</a></li><li><a href="module-lib_SQLiteHelper-SQLiteHelperSingleton.html">SQLiteHelperSingleton</a></li></ul><h3>Classes</h3><ul><li><a href="module-lib_CycleRepository-CycleRepository.html">CycleRepository</a></li><li><a href="module-lib_ExpenseRepository-ExpenseRepository.html">ExpenseRepository</a></li><li><a href="module-lib_SQLiteHelper-SQLiteHelper.html">SQLiteHelper</a></li><li><a href="module-lib_UserRepository-UserRepository.html">UserRepository</a></li><li><a href="module-models_BudgetCycle-BudgetCycle.html">BudgetCycle</a></li><li><a href="module-models_Category-Category.html">Category</a></li><li><a href="module-models_Expense-Expense.html">Expense</a></li><li><a href="module-models_User-User.html">User</a></li><li><a href="module-services_DailyLimitCalculator-DailyLimitCalculator.html">DailyLimitCalculator</a></li><li><a href="module-services_NotificationService-NotificationService.html">NotificationService</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Tue May 05 2026 19:32:42 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

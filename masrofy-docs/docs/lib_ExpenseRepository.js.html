@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: lib/ExpenseRepository.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: lib/ExpenseRepository.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview ExpenseRepository — Data access layer for Expense entities.
+ * Provides CRUD operations and filtering queries for expense records.
+ * Follows the Repository Pattern to isolate all expense-related SQL from business logic.
+ * @module lib/ExpenseRepository
+ * @author Karim Ashraf Ahmed, Eyad Hatem Fouad, Sherif Ahmed Metwally, Ahmed Sherif Ahmed
+ */
+
+import SQLiteHelper from './SQLiteHelper';
+
+/**
+ * @class ExpenseRepository
+ * @classdesc Handles all database operations related to Expense records.
+ * Supports insertion, update, deletion, and multiple filtering strategies
+ * (by cycle, category, and date range). All queries use prepared statements.
+ */
+class ExpenseRepository {
+    /**
+     * Creates a new ExpenseRepository and connects to the shared database instance.
+     */
+    constructor() {
+        this.db = SQLiteHelper.getInstance().getWritableDatabase();
+    }
+
+    /**
+     * Inserts a new expense record into the database.
+     * @param {Expense} expense - The Expense object to persist.
+     * @returns {number} The auto-generated ID of the newly inserted expense row.
+     */
+    insertExpense(expense) {
+        const stmt = this.db.prepare(
+            'INSERT INTO Expense(amount, categoryId, cycleId, timestamp, note) VALUES (?, ?, ?, ?, ?)'
+        );
+        const result = stmt.run(expense.amount, expense.categoryId, expense.cycleId, expense.timestamp, expense.note);
+        return result.lastInsertRowid;
+    }
+
+    /**
+     * Updates an existing expense's amount, category, and note.
+     * @param {{id: number, amount: number, categoryId: number, note: string}} expense - Object containing the updated fields and the expense ID.
+     * @returns {boolean} True if the expense was found and updated, false otherwise.
+     */
+    updateExpense(expense) {
+        const stmt = this.db.prepare('UPDATE Expense SET amount = ?, categoryId = ?, note = ? WHERE id = ?');
+        const result = stmt.run(expense.amount, expense.categoryId, expense.note, expense.id);
+        return result.changes > 0;
+    }
+
+    /**
+     * Deletes an expense by its ID.
+     * @param {number} expenseId - The ID of the expense to delete.
+     * @returns {boolean} True if the expense was deleted, false if not found.
+     */
+    deleteExpense(expenseId) {
+        const stmt = this.db.prepare('DELETE FROM Expense WHERE id = ?');
+        const result = stmt.run(expenseId);
+        return result.changes > 0;
+    }
+
+    /**
+     * Retrieves all expenses for a given budget cycle, ordered by most recent first.
+     * @param {number} cycleId - The ID of the budget cycle.
+     * @returns {Object[]} An array of plain expense row objects ordered by timestamp descending.
+     */
+    getAllByCycle(cycleId) {
+        const stmt = this.db.prepare('SELECT * FROM Expense WHERE cycleId = ? ORDER BY timestamp DESC');
+        return stmt.all(cycleId);
+    }
+
+    /**
+     * Retrieves expenses filtered by a specific category within a budget cycle.
+     * @param {number} cycleId - The ID of the budget cycle.
+     * @param {number} categoryId - The ID of the category to filter by.
+     * @returns {Object[]} An array of matching expense row objects ordered by timestamp descending.
+     */
+    filterByCategory(cycleId, categoryId) {
+        const stmt = this.db.prepare(
+            'SELECT * FROM Expense WHERE cycleId = ? AND categoryId = ? ORDER BY timestamp DESC'
+        );
+        return stmt.all(cycleId, categoryId);
+    }
+
+    /**
+     * Retrieves expenses within a specific date range for a given budget cycle.
+     * @param {number} cycleId - The ID of the budget cycle.
+     * @param {string} startDate - The start of the date range in ISO 8601 format.
+     * @param {string} endDate - The end of the date range in ISO 8601 format.
+     * @returns {Object[]} An array of matching expense row objects ordered by timestamp descending.
+     */
+    filterByDateRange(cycleId, startDate, endDate) {
+        const stmt = this.db.prepare(
+            'SELECT * FROM Expense WHERE cycleId = ? AND timestamp BETWEEN ? AND ? ORDER BY timestamp DESC'
+        );
+        return stmt.all(cycleId, startDate, endDate);
+    }
+
+    /**
+     * Calculates the total amount spent across all expenses in a budget cycle.
+     * @param {number} cycleId - The ID of the budget cycle.
+     * @returns {number} The total amount spent, or 0 if no expenses exist.
+     */
+    getTotalSpent(cycleId) {
+        const stmt = this.db.prepare('SELECT SUM(amount) as total FROM Expense WHERE cycleId = ?');
+        const result = stmt.get(cycleId);
+        return result.total || 0;
+    }
+
+    /**
+     * Retrieves the total amount spent per category within a budget cycle.
+     * Used by the dashboard to build the category breakdown and donut chart.
+     * Aggregation is performed in SQL for efficiency.
+     * @param {number} cycleId - The ID of the budget cycle.
+     * @returns {Array.&lt;{categoryId: number, total: number}>} An array of objects with categoryId and total spent.
+     */
+    getTotalByCategory(cycleId) {
+        const stmt = this.db.prepare(
+            'SELECT categoryId, SUM(amount) as total FROM Expense WHERE cycleId = ? GROUP BY categoryId'
+        );
+        return stmt.all(cycleId);
+    }
+
+    /**
+     * Retrieves a single category record by its ID.
+     * @param {number} categoryId - The ID of the category to retrieve.
+     * @returns {Object|undefined} The category row object, or undefined if not found.
+     */
+    getCategoryById(categoryId) {
+        const stmt = this.db.prepare('SELECT * FROM Category WHERE id = ?');
+        return stmt.get(categoryId);
+    }
+}
+
+export default ExpenseRepository;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-api.html">api</a></li><li><a href="module-lib_CycleRepository.html">lib/CycleRepository</a></li><li><a href="module-lib_ExpenseRepository.html">lib/ExpenseRepository</a></li><li><a href="module-lib_SQLiteHelper.html">lib/SQLiteHelper</a></li><li><a href="module-lib_UserRepository.html">lib/UserRepository</a></li><li><a href="module-models_BudgetCycle.html">models/BudgetCycle</a></li><li><a href="module-models_Category.html">models/Category</a></li><li><a href="module-models_Expense.html">models/Expense</a></li><li><a href="module-models_User.html">models/User</a></li><li><a href="module-services_DailyLimitCalculator.html">services/DailyLimitCalculator</a></li><li><a href="module-services_NotificationService.html">services/NotificationService</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-api-API_Cycle.html">API_Cycle</a></li><li><a href="module-api-API_Dashboard.html">API_Dashboard</a></li><li><a href="module-api-API_Expense.html">API_Expense</a></li><li><a href="module-api-API_User.html">API_User</a></li><li><a href="module-lib_SQLiteHelper-SQLiteHelperSingleton.html">SQLiteHelperSingleton</a></li></ul><h3>Classes</h3><ul><li><a href="module-lib_CycleRepository-CycleRepository.html">CycleRepository</a></li><li><a href="module-lib_ExpenseRepository-ExpenseRepository.html">ExpenseRepository</a></li><li><a href="module-lib_SQLiteHelper-SQLiteHelper.html">SQLiteHelper</a></li><li><a href="module-lib_UserRepository-UserRepository.html">UserRepository</a></li><li><a href="module-models_BudgetCycle-BudgetCycle.html">BudgetCycle</a></li><li><a href="module-models_Category-Category.html">Category</a></li><li><a href="module-models_Expense-Expense.html">Expense</a></li><li><a href="module-models_User-User.html">User</a></li><li><a href="module-services_DailyLimitCalculator-DailyLimitCalculator.html">DailyLimitCalculator</a></li><li><a href="module-services_NotificationService-NotificationService.html">NotificationService</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Tue May 05 2026 19:32:42 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
