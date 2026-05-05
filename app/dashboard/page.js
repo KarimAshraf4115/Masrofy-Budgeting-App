@@ -97,17 +97,17 @@ export default function DashboardPage() {
       </div>
 
       {/* 3. ALERT BANNER - only shows if there's an alert */}
-      {alerts.finalDayWarning && (
-        <div className="mb-8 flex items-start gap-4 bg-error-container p-4 rounded-xl border border-error/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+      {alerts.length > 0 && alerts.map((alert, i) => (
+        <div key={i} className="mb-8 flex items-start gap-4 bg-error-container p-4 rounded-xl border border-error/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
           <div className="bg-error/10 p-2 rounded-full mt-0.5">
             <span className="material-symbols-outlined text-error text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>warning</span>
           </div>
           <div>
             <h4 className="font-label-caps text-label-caps text-on-error-container">Alert</h4>
-            <p className="font-body-sm text-body-sm text-on-error-container mt-1 opacity-90">{alerts.finalDayWarning.message}</p>
+            <p className="font-body-sm text-body-sm text-on-error-container mt-1 opacity-90">{alert.message}</p>
           </div>
         </div>
-      )}
+      ))}
 
       {/* 4. DASHBOARD BENTO GRID */}
       {/* grid-cols-1: 1 column on mobile. lg:grid-cols-12: 12 columns on desktop */}

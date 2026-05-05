@@ -1,31 +1,19 @@
+
+// New Fixes Added : remove flags (alert80sent , alert100sent , isFinalDay,.....) since every request in api has its own fresh instance so the notification will be checked if should be sent ot not every time.. the notification will not be recorded as a flag
+
 class NotificationService {
-    constructor() {
-        this.alert80sent = false; // flag to track if the 80% alert has been sent for the current cycle
-        this.alert100sent = false; // flag to track if the 100% alert has been sent for the current cycle
-        this.finalDayAlertSent = false; // flag to track if the final day warning has been sent for the current cycle
-    }
-
-    resetAlerts() {
-        this.alert80sent = false;
-        this.alert100sent = false;
-        this.finalDayAlertSent = false;
-    }
-
     sendThresholdAlerts(percentageUsed) {
-        if (percentageUsed >= 80 && percentageUsed < 100 && !this.alert80sent) {
-            this.alert80sent = true;
+        if (percentageUsed >= 80 && percentageUsed < 100) {
             return{
                 type: 'warning',
                 message: `Alert: You've used ${percentageUsed}% of your budget!`
             }
         }
         return null; // returning null if no threshold alert is triggered, indicating that the budget usage has not yet reached the 80% threshold or the alert has already been sent
-    
     }
 
     sendBudgetExhaustedAlert(percentageUsed) {
-        if (percentageUsed >= 100 && !this.alert100sent) {
-            this.alert100sent = true;
+        if (percentageUsed >= 100 ) {
             return {
                 type: 'danger',
                 message: `Alert: You've exhausted your budget!`
@@ -35,8 +23,7 @@ class NotificationService {
     }
 
     sendFinalDayWarning(daysLeft) {
-        if (daysLeft === 1 && !this.finalDayAlertSent) {
-            this.finalDayAlertSent = true;
+        if (daysLeft === 1) {
             return {
                 type: 'info',
                 message: `Alert: This is your final day with the budget!`

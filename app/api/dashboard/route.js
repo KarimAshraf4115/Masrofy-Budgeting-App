@@ -2,21 +2,18 @@
 
 import CycleRepository from '@/lib/CycleRepository';
 import ExpenseRepository from '@/lib/ExpenseRepository';
-import DailyLimitCalculator from '@/Services/DailyLimitCalculator';
+import DailyLimitCalculator from '@/services/DailyLimitCalculator';
 import BudgetCycle from '@/models/BudgetCycle';
-import NotificationService from '@/Services/NotificationService';
+import NotificationService from '@/services/NotificationService';
 
-const cycleRepo = new CycleRepository();
-const expenseRepo = new ExpenseRepository();
-const calculator = new DailyLimitCalculator();
-const notificationService = new NotificationService();
 
 export async function GET(){
+    const cycleRepo = new CycleRepository(); // ------------------New Fix
     const cycleData = cycleRepo.getActiveCycle();
     if(!cycleData){
         return Response.json({ message: 'No active cycle found' }, { status: 404 });
     }
-
+    
     const cycle = new BudgetCycle(
         cycleData.id,
         cycleData.totalAllowance,
@@ -25,27 +22,26 @@ export async function GET(){
         cycleData.isActive,
         cycleData.createdAt
     );
-
+    const expenseRepo = new ExpenseRepository();
+    const calculator = new DailyLimitCalculator();
+    const notificationService = new NotificationService();
+    
     const totalSpent = expenseRepo.getTotalSpent(cycle.id); 
-    const categoryTotals = expenseRepo.getAllByCycle(cycle.id);
+    const categoryTotals = expenseRepo.getTotalByCategory(cycle.id);
     const percentageUsed = calculator.checkThreshold(totalSpent, cycle.totalAllowance);
     const remainingBalance = calculator.calculateRemainingBalance(cycle.totalAllowance, totalSpent);
     const remainingDays = cycle.getRemainingDays();
     const dailyLimit = calculator.calculateDailyLimit(remainingBalance, remainingDays); 
-    const aggregatedByCategory = calculator.aggregateByCategory(categoryTotals);
 
-    const categoryBreakdown = Object.entries(aggregatedByCategory).map(([categoryId, total]) => {
+    const categoryBreakdown = categoryTotals.map(row => {
         return {
-            categoryId: categoryId,
-            totalSpent: total,
-            percentage: calculator.calculateCategoryPercentage(total, totalSpent)
+            categoryId: row.categoryId,
+            totalSpent: row.total,
+            percentage: calculator.calculateCategoryPercentage(row.total, totalSpent)
         };
     });
 
-    let finalDayWarning = null;
-    if(cycle.isLastDay()){
-        finalDayWarning = notificationService.sendFinalDayWarning(remainingDays); // FIX: Pass remainingDays, not remainingBalance
-    }
+    const alerts = notificationService.checkAllAlerts(percentageUsed, remainingDays);
 
     return Response.json({
         hasActiveCycle: true,
@@ -67,9 +63,8 @@ export async function GET(){
 
         categoryBreakdown: categoryBreakdown,
 
-        alerts : { // Alerts info
-            finalDayWarning : finalDayWarning
-        }
+        alerts : alerts  // Alerts info
+
     },{status:200});
 }
 

@@ -27,18 +27,18 @@ export default function HistoryPage() {
       const cycleData = await cycleRes.json()
       if (!cycleRes.ok) {
         setError('No active cycle found')
+        setIsLoading(false)
         return
       }
 
-      // Step 2: get total spent from dashboard
-      const dashRes = await fetch('/api/dashboard')
-      const dashData = await dashRes.json()
-      setTotalSpent(dashData.financials.totalSpent)
-
-      // Step 3: get all expenses for this cycle
+      // Step 2: get all expenses for this cycle
       const expRes = await fetch(`/api/expense?cycleId=${cycleData.cycle.id}`)
       const expData = await expRes.json()
       setExpenses(expData.expenses)
+
+      // Step 3: get total spent from expenses
+      const total = expData.expenses.reduce((sum, exp) => sum + exp.amount, 0)
+      setTotalSpent(total)
 
     } catch (err) {
       setError('Failed to load expenses')
@@ -54,11 +54,9 @@ export default function HistoryPage() {
 
   // DELETE: removes an expense and refreshes the list
   const handleDelete = async (expenseId) => {
-    const response = await fetch('/api/expense', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: expenseId })
-    })
+  const response = await fetch(`/api/expense?id=${expenseId}`, { //----------new fix : make DELETE request work on id from search params (best practice)
+    method: 'DELETE'
+  })
     if (response.ok) {
       loadExpenses() // refresh the list after deleting
     }
