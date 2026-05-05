@@ -11,7 +11,19 @@ export default function AddExpensePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [cycleData, setCycleData] = useState(null)  // holds active cycle info
+  const [expenseDate, setExpenseDate] = useState(new Date().toISOString().split('T'[0])) //YYYY-MM-DD
   const router = useRouter()
+
+    // Calculate remaining days from the cycle data
+  const remainingDays = cycleData ? (() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const end = new Date(cycleData.endDate);
+    end.setHours(0, 0, 0, 0);
+    if (end < today) return 0;
+    const diffTime = end - today;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include today
+  })() : '...';
 
   // EFFECT: load active cycle when page opens
   useEffect(() => {
@@ -40,6 +52,7 @@ export default function AddExpensePage() {
         amount: parseFloat(amount),   // convert "50" → 50
         categoryId: parseInt(categoryId), // convert "1" → 1
         cycleId: cycleData.id,        // from the cycle we loaded
+        timestamp: new Date(expenseDate).toISOString, // use selected date
         note: note
       })
     })
@@ -135,6 +148,8 @@ export default function AddExpensePage() {
                   <input 
                     type="date" 
                     id="date"
+                    value={expenseDate}
+                    onChange={(e) => setExpenseDate(e.target.value)}
                     className="w-full bg-transparent border-none focus:ring-0 p-0 font-body-lg text-body-lg text-on-surface outline-none cursor-pointer" 
                   />
                 </div>
@@ -177,6 +192,7 @@ export default function AddExpensePage() {
         </div>
 
         {/* Right Side Helper Card (Spans 4 cols) */}
+                {/* Right Side Helper Card (Spans 4 cols) */}
         <div className="lg:col-span-4 bg-surface-container-lowest rounded-xl p-card-padding shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-outline-variant/20">
           
           <div className="flex items-center gap-2 mb-6">
@@ -198,13 +214,25 @@ export default function AddExpensePage() {
             <div className="flex justify-between items-center font-body-sm text-body-sm">
               <span className="text-on-surface-variant">Remaining</span>
               <span className="text-secondary font-semibold">
-                {cycleData ? `${cycleData.remainingDays ?? '...'} days` : 'Loading...'}
+                {cycleData ? (() => {
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  // Adding 'T00:00:00' prevents Javascript timezone bugs that shift the date back by 1 day
+                  const end = new Date(cycleData.endDate + 'T00:00:00'); 
+                  end.setHours(0, 0, 0, 0);
+                  
+                  if (end < today) return '0 days';
+                  
+                  const diffTime = end - today;
+                  const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include today
+                  
+                  return `${days} days`;
+                })() : 'Loading...'}
               </span>
             </div>
           </div>
 
         </div>
-
       </div>
     </div>
   )

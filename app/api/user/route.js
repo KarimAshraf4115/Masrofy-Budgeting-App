@@ -62,7 +62,7 @@ export async function PUT(request) {
             message: `Too many attempts. Try again in ${timeLeft} seconds.`,
             locked: true,
             timeLeft
-        }, { status: 429 }); // 429 = Too Many Requests
+        }, { status: 429 });
     }
 
     const success = user.verifyPin(body.pin);
@@ -71,6 +71,7 @@ export async function PUT(request) {
     userRepo.updateUser(user);
 
     if (success) {
+        // FIX: YOU WERE MISSING THIS RETURN STATEMENT!
         return Response.json({ message: 'PIN verified successfully', success: true }, { status: 200 });
     } else {
         const attemptsLeft = 5 - user.failedAttempts;
@@ -80,6 +81,6 @@ export async function PUT(request) {
                 : 'Too many attempts. Locked out for 30 seconds.',
             success: false,
             attemptsLeft
-        }, { status: 401 }); // 401 = Unauthorized
+        }, { status: 401 });
     }
 }

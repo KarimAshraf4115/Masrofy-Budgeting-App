@@ -2,10 +2,13 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import UserRepository from '@/lib/UserRepository'
 
 export default function SettingsPage() {
   const router = useRouter()
+
+  // --- Profile State ---
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
 
   // --- Cycle Reset State ---
   const [isResetting, setIsResetting] = useState(false)
@@ -113,7 +116,7 @@ export default function SettingsPage() {
         {/* LEFT COLUMN: Profile & Preferences */}
         <div className="lg:col-span-7 space-y-8">
 
-          {/* Profile Management Card — static UI, needs auth first */}
+          {/* Profile Management Card */}
           <div className="bg-surface-container-lowest rounded-xl p-card-padding shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
             <h3 className="font-headline-md text-headline-md text-on-surface mb-6">Profile Management</h3>
             <div className="flex items-start gap-6 mb-8">
@@ -128,11 +131,25 @@ export default function SettingsPage() {
               <div className="flex-1 space-y-4">
                 <div className="relative pt-4">
                   <label className="absolute top-0 left-0 font-label-caps text-label-caps text-outline">FULL NAME</label>
-                  <input className="w-full bg-surface py-2 border-0 border-b-2 border-transparent focus:border-primary-container focus:ring-0 transition-colors font-body-lg text-body-lg text-on-surface" type="text" value="Alexander Wright" readOnly />
+                  {/* REMOVED readOnly, ADDED value and onChange */}
+                  <input 
+                    className="w-full bg-surface py-2 border-0 border-b-2 border-transparent focus:border-primary-container focus:ring-0 transition-colors font-body-lg text-body-lg text-on-surface" 
+                    type="text" 
+                    value={fullName} 
+                    onChange={(e) => setFullName(e.target.value)} 
+                    placeholder="Enter your name"
+                  />
                 </div>
                 <div className="relative pt-4">
                   <label className="absolute top-0 left-0 font-label-caps text-label-caps text-outline">EMAIL ADDRESS</label>
-                  <input className="w-full bg-surface py-2 border-0 border-b-2 border-transparent focus:border-primary-container focus:ring-0 transition-colors font-body-lg text-body-lg text-on-surface text-on-surface-variant" type="email" value="alexander.wright@example.com" readOnly />
+                  {/* REMOVED readOnly, ADDED value and onChange */}
+                  <input 
+                    className="w-full bg-surface py-2 border-0 border-b-2 border-transparent focus:border-primary-container focus:ring-0 transition-colors font-body-lg text-body-lg text-on-surface" 
+                    type="email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    placeholder="Enter your email"
+                  />
                 </div>
               </div>
             </div>
@@ -142,7 +159,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* Preferences Card — static UI */}
+          {/* Preferences Card — Theme Removed */}
           <div className="bg-surface-container-lowest rounded-xl p-card-padding shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
             <h3 className="font-headline-md text-headline-md text-on-surface mb-6">Preferences</h3>
             <div className="space-y-6">
@@ -157,15 +174,7 @@ export default function SettingsPage() {
                   <option>EGP (£)</option>
                 </select>
               </div>
-              <div className="flex items-center justify-between pt-4 border-t border-surface-container">
-                <div>
-                  <h4 className="font-body-lg text-body-lg font-medium text-on-surface">Dark Mode</h4>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant">Toggle application theme</p>
-                </div>
-                <div className="w-12 h-6 bg-outline-variant rounded-full relative cursor-pointer transition-colors">
-                  <div className="absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow-md transform translate-x-0 transition-transform"></div>
-                </div>
-              </div>
+              {/* Dark Mode Toggle Has Been Removed Here */}
             </div>
           </div>
         </div>

@@ -23,6 +23,8 @@ export async function GET(){ // Used to fetch-retrieve data from the server
         cycleData.isActive,
         cycleData.createdAt
     );
+
+    
     return Response.json({ message: 'Active cycle found', cycle },{ status: 200 });
 }
 

@@ -58,8 +58,10 @@ export default function AppShell({ children }) {
 
         {/* Logo Area */}
         <div className="px-4 pt-4 mb-8">
-          <h1 className="text-2xl font-black text-blue-900">Masroofy</h1>
-          <p className="text-xs text-slate-500 mt-1 uppercase tracking-wider">Financial Precision</p>
+      <Link href="/login">
+        <h1 className="text-2xl font-black text-blue-900 cursor-pointer">Masrofy</h1>
+      </Link>         
+        <p className="text-xs text-slate-500 mt-1 uppercase tracking-wider">Financial Precision</p>
         </div>
         
         {/* Navigation Links */}
