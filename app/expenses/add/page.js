@@ -52,7 +52,7 @@ export default function AddExpensePage() {
         amount: parseFloat(amount),   // convert "50" → 50
         categoryId: parseInt(categoryId), // convert "1" → 1
         cycleId: cycleData.id,        // from the cycle we loaded
-        timestamp: new Date(expenseDate).toISOString, // use selected date
+        timestamp: new Date(expenseDate).toISOString(), // use selected date
         note: note
       })
     })

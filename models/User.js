@@ -22,7 +22,7 @@ class User{
             return true; // if the hashes match, reset failed attempts and return true indicating successful authentication
         } else {
             this.failedAttempts += 1;
-            if(this.failedAttempts >= 5){ // if the number of failed attempts reaches 5, set the lockout time to the current time plus a certain duration
+            if(this.failedAttempts >= 3){ // if the number of failed attempts reaches 3, set the lockout time to the current time plus a certain duration
                 this.lockoutTime = new Date().getTime() + 30 * 1000; // 30 seconds in milliseconds
             }
             return false; // if the hashes do not match, increment failed attempts and return false indicating failed authentication

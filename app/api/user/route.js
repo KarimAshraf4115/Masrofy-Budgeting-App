@@ -71,10 +71,9 @@ export async function PUT(request) {
     userRepo.updateUser(user);
 
     if (success) {
-        // FIX: YOU WERE MISSING THIS RETURN STATEMENT!
         return Response.json({ message: 'PIN verified successfully', success: true }, { status: 200 });
     } else {
-        const attemptsLeft = 5 - user.failedAttempts;
+        const attemptsLeft = 3 - user.failedAttempts;
         return Response.json({
             message: attemptsLeft > 0
                 ? `Wrong PIN. ${attemptsLeft} attempt${attemptsLeft === 1 ? '' : 's'} left.`
